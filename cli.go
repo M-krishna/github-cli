@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+	"sync"
 )
 
 var options struct {
@@ -38,7 +39,7 @@ func init(){
 	flag.StringVar(&options.users, "u", "", "Search User (Eg. john)")
 }
 
-func GetUserFromGithub(name string){
+func GetUserFromGithub(name string, wg *sync.WaitGroup){
 	
 	var responseBody Response
 
@@ -58,7 +59,7 @@ func GetUserFromGithub(name string){
 		
 		json.Unmarshal(responseData, &responseBody)
 	
-		fmt.Println()
+		fmt.Println("#######################################")
 		fmt.Println("Name: ", responseBody.Name)
 		fmt.Println("Login: ", responseBody.Login)
 		fmt.Println("Avatar: ", responseBody.Avatar)
@@ -68,10 +69,11 @@ func GetUserFromGithub(name string){
 		fmt.Println("Bio: ", responseBody.Bio)
 		fmt.Println("Followers: ", responseBody.Followers)
 		fmt.Println("Following: ", responseBody.Following)
-		fmt.Println()
+		fmt.Println("########################################")
 	} else {
 		fmt.Printf("%s not found\n", name)
 	}
+	wg.Done()
 }
 
 func main()  {
@@ -91,9 +93,12 @@ func main()  {
 	user_result := strings.Split(user, ",")
 	fmt.Printf("Searching user(s): %s\n", user_result)
 
+	var wg sync.WaitGroup
 	for _, username := range user_result {
 		if len(username) > 1 {
-			go GetUserFromGithub(username)
+			wg.Add(1)
+			go GetUserFromGithub(username, &wg)
 		}
 	}
+	wg.Wait()
 }
