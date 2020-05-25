@@ -1,8 +1,8 @@
-package main
+package cli
 
 import (
-	"testing"
 	"sync"
+	"testing"
 )
 
 func BenchmarkGetUserFromGithub(b *testing.B) {
