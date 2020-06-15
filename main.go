@@ -14,8 +14,7 @@ func init() {
 	const (
 		usage = "Search Users (Eg. john,david)"
 	)
-	flag.StringVar(&data.Users, "users", "", usage)
-	flag.StringVar(&data.Users, "u", "", "Search User (Eg. john)")
+	flag.StringVar(&data.Users, "u", "", "Search User (Eg. john) or (Eg. john,foo,bar)")
 }
 
 func main() {
