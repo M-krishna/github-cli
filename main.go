@@ -12,9 +12,9 @@ import (
 
 func init() {
 	const (
-		usage = "Search Users (Eg. john,david)"
+		usage = "Search Users (Eg. john) or (Eg. john,foo,bar)"
 	)
-	flag.StringVar(&data.Users, "u", "", "Search User (Eg. john) or (Eg. john,foo,bar)")
+	flag.StringVar(&data.Users, "u", "", usage)
 }
 
 func main() {
@@ -27,10 +27,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var users *string
-	users = &data.Users
-	user := *users
-	userResult := strings.Split(user, ",")
+	userResult := strings.Split(data.Users, ",")
 	fmt.Printf("Searching user(s): %s\n", userResult)
 
 	var wg sync.WaitGroup
